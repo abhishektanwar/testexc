@@ -5,3 +5,6 @@ import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 contract Zrx is ERC20 {
     constructor () ERC20 ('0x Token', 'ZRX') public {}
 } 
+function faucet(address to, uint amount) external {
+    _mint(to, amount);
+}

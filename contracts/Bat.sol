@@ -5,3 +5,7 @@ import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 contract Bat is ERC20 {
     constructor () ERC20 ('Brave Browser Token', 'BAT') public {}
 } 
+
+function faucet(address to, uint amount) external {
+    _mint(to, amount);
+}

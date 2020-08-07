@@ -59,10 +59,35 @@ contract Dex {
     constructor() public {
         admin= msg.sender;
     }
+
+    function getOrders(
+        bytes32 ticker,
+        Side side)
+        external
+        view
+        returns(Order[] memory){
+            return orderBook[ticker][uint(side)];
+        }
+
+    function getTokens()
+        external
+        view
+        returns(Token[] memory){
+            Token[] memory _token = new Token[](tokenList.length);
+            for(uint i=0;i < tokenList.length ;i++){
+                _token[i] = Token(
+                    tokens[tokenList[i]].id,
+                    tokens[tokenList[i]].symbol,
+                    tokens[tokenList[i]].at
+                );
+            }
+        }
+
     function addToken(
         bytes32 ticker,
-        address  tokenAddress
-        ) onlyAdmin() external{
+        address  tokenAddress)
+        onlyAdmin()
+        external{
             tokens[ticker] = Token(ticker, tokenAddress);
             tokenList.push(ticker);
         }
