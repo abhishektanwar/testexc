@@ -1,7 +1,7 @@
 pragma solidity 0.6.3;
-
-import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol';
-import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol';
+pragma experimental ABIEncoderV2;
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/math/SafeMath.sol';
 contract Dex {
     
     using SafeMath for uint;
@@ -76,11 +76,11 @@ contract Dex {
             Token[] memory _token = new Token[](tokenList.length);
             for(uint i=0;i < tokenList.length ;i++){
                 _token[i] = Token(
-                    tokens[tokenList[i]].id,
-                    tokens[tokenList[i]].symbol,
-                    tokens[tokenList[i]].at
+                    tokens[tokenList[i]].ticker,
+                    tokens[tokenList[i]].tokenAddress
                 );
             }
+            return _token;
         }
 
     function addToken(
