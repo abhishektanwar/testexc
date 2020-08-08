@@ -279,7 +279,7 @@ contract('Dex',(accounts) => {
     });
 
     //market order test
-
+    // test 11 
     it('should create market order and match existing limit order', async () => {
         await dex.deposit(
             web3.utils.toWei('100'),
@@ -323,6 +323,7 @@ contract('Dex',(accounts) => {
         assert(balances[3].toString() === web3.utils.toWei('95'));
     });
 
+    // test 12
     it('should not create market order if token does not exist',async () => {
         await expectRevert(
             dex.createMarketOrder(
@@ -335,7 +336,7 @@ contract('Dex',(accounts) => {
         ); 
     });
 
-    // test 8 : fail case
+    // test 13 : fail case
     it('should not create market order if token is DAI',async () => {
         await expectRevert(
             dex.createMarketOrder(
@@ -348,6 +349,7 @@ contract('Dex',(accounts) => {
         ); 
     });
 
+    // test 14 fail case
     it('should not create market order if token balance is too low',async () => {
         const amount = web3.utils.toWei('99');
 
@@ -360,7 +362,7 @@ contract('Dex',(accounts) => {
         await expectRevert(
             dex.createMarketOrder(
                 REP,
-                web3.utils.toWei('100'), //selling 10 tokens
+                web3.utils.toWei('100'), //selling 100 tokens
                 SIDE.SELL,
                 {from:trader1}
             ),
@@ -386,7 +388,7 @@ contract('Dex',(accounts) => {
         await expectRevert(
             dex.createMarketOrder(
                 REP,
-                web3.utils.toWei('10'), //selling 10 tokens
+                web3.utils.toWei('10'), //buying 10 tokens
                 SIDE.BUY,
                 {from:trader2}
             ),'dai balance too low'
