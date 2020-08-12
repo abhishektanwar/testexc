@@ -8,16 +8,16 @@ function Header({
     selectToken
 }) {
     return (
-        <Header id="header" className="card">
+        <header id="header" className="card">
             <div className="row">
                 <div className="col-sm-3 flex">
                     <Dropdown 
-                        items={tokens.map(token => (
-                            {
+                        items={tokens.map((token) => ({
+                            
                                 label:token.ticker,
                                 value: token
-                            }
-                        ))}
+                            
+                        }))}
                         activeItem = {{
                             label:user.selectedToken.ticker,
                             value:user.selectedToken
@@ -34,8 +34,8 @@ function Header({
                     </h1>
                 </div>
             </div>
-        </Header>
+        </header>
     );
 }
 
-export default Header
+export default Header;

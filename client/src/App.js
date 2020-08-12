@@ -1,15 +1,61 @@
 import React,{useState,useEffect} from 'react';
 import Header from './Header.js';
+import WalletComponent from './WalletComponent.js';
 
 function App({web3, accounts, contracts}) {
   const [tokens,setTokens] = useState([]);
   const [user,setUser] = useState({
     accounts:[],
-    selectedTokens:undefined
+    balances:{
+      tokenDex:0,
+      tokenWallet:0
+    },
+    selectedToken:undefined
   });
 
   const selectToken = token => {
     setUser({...user, selectedToken:token});
+  }
+
+  const getBalances = async (account, token) => {
+    const tokenDex = await contracts.dex.methods
+      .traderBalances(account, web3.utils.fromAscii(token.ticker))
+      .call();
+    const tokenWallet = await contracts[token.ticker].methods
+      .balanceOf(account).call();
+    return {tokenDex, tokenWallet};
+  }
+
+  const deposit =async (amount) => {
+    await contracts[user.selectedToken.ticker].methods
+    .approve(contracts.dex.options.address, amount);
+    await contracts.dex.methods
+    .deposit(
+      amount,
+      web3.utils.fromAscii(user.selectedToken.ticker)
+    )
+    .send({from:user.accounts[0]});
+
+    const balances = await getBalances(
+      user.accounts[0],
+      user.selectedToken
+    );
+    setUser(user => ({...user, balances}));
+  }
+
+  const withdraw =async (amount) => {
+    await contracts.dex.methods
+    .withdraw(
+      amount,
+      web3.utils.fromAscii(user.selectedToken.ticker)
+    )
+    .send({from:user.accounts[0]});
+
+    const balances = await getBalances(
+      user.accounts[0],
+      user.selectedToken
+    );
+    setUser(user => ({...user, balances}));
   }
 
   useEffect(() => {
@@ -19,16 +65,17 @@ function App({web3, accounts, contracts}) {
         ...token,
         ticker:web3.utils.hexToUtf8(token.ticker)
       }));
+      const balances = await getBalances(accounts[0], tokens[0]);
       setTokens(tokens);
-      setUser({accounts, selectedTokens:tokens[0]});
+      setUser({accounts, balances, selectedToken:tokens[0]});
     }
     init();
     
   }, []);
 
-  // if(typeof user.selectedToken === 'undefined'){
-  //   return(<div>LOADING...</div>)
-  // }
+  if(typeof user.selectedToken === 'undefined'){
+    return(<div>LOADING...</div>)
+  }
   return (
     <div id="app">
       <Header 
@@ -37,7 +84,17 @@ function App({web3, accounts, contracts}) {
         user = {user}
         selectToken = {selectToken}
       />
-
+      <main className="container-fluid">
+        <div className="row">
+          <div className="col-sm-4 first-col">
+            <WalletComponent
+              user={user}
+              deposit={deposit}
+              withdraw={withdraw}
+            />
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
