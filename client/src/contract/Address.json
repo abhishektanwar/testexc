@@ -5761,8 +5761,8 @@
     "version": "0.6.3+commit.8dda9521.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.2.3",
-  "updatedAt": "2020-08-09T17:45:43.877Z",
+  "schemaVersion": "3.2.0",
+  "updatedAt": "2020-08-13T04:47:27.728Z",
   "devdoc": {
     "details": "Collection of functions related to the address type",
     "methods": {}
